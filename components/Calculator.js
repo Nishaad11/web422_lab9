@@ -1,3 +1,4 @@
+// Feature: scientific notation (E button)
 import { useState } from "react";
 
 export default function Calculator() {
