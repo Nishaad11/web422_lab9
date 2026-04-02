@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Next.js app
+        run: npm run build
+
+      - name: Start Next.js app in background
+        run: npm start &
+        env:
+          PORT: 3000
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:3000 --timeout 30000
+
+      - name: Run Cypress E2E tests
+        run: npx cypress run
